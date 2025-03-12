@@ -1,3 +1,3 @@
 export function QuoteGen() {
-  return <div>{/* todo */}</div>;
+  return <div>Quote Generator</div>;
 }
