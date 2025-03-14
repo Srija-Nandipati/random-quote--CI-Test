@@ -2,7 +2,7 @@ import { QuoteGen } from "./components/QuoteGen";
 
 function App() {
   return (
-    <div className="App">
+    <div style={{ width: "100%" }}>
       <QuoteGen />
     </div>
   );

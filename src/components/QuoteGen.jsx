@@ -1,41 +1,66 @@
-// export function QuoteGen() {
-//   return <div>Quote Generator</div>;
-// }
-
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
+import { categories, quotes } from "../consts/quotes";
+import { Social } from "./Social";
 
 export function QuoteGen() {
-  // State for quote and author
-  const [quote, setQuote] = useState('');
-  const [author, setAuthor] = useState('');
+  const [displayQuote, setDisplayQuote] = useState();
+  const [selectedCategory, setSelectedCategory] = useState();
 
-  // Function to fetch a random quote
-  const fetchQuote = async () => {
-    try {
-      const response = await fetch('https://type.fit/api/quotes');
-      const quotes = await response.json();
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      setQuote(randomQuote.text);
-      setAuthor(randomQuote.author || 'Unknown');
-    } catch (error) {
-      console.error('Error fetching the quote:', error);
+  function getRandomQuote(category) {
+    const filteredQuotes = category
+      ? quotes.filter(
+          (quote) => quote.category.toLowerCase() === category.toLowerCase()
+        )
+      : quotes;
+
+    if (filteredQuotes.length === 0) {
+      return { error: "No quotes found for the specified category." };
     }
-  };
 
-  // Fetch a quote on component mount
+    const randomIndex = Math.floor(Math.random() * filteredQuotes.length);
+    setDisplayQuote(filteredQuotes[randomIndex]);
+  }
+
   useEffect(() => {
-    fetchQuote();
-  }, []);
+    if (!displayQuote) getRandomQuote(selectedCategory);
+  }, [displayQuote]);
+
+  useEffect(() => {
+    if (selectedCategory) getRandomQuote(selectedCategory);
+  }, [selectedCategory]);
 
   return (
-    <div className="quote-generator">
-      <div className="quote-card">
-        <p className="quote-text">"{quote}"</p>
-        <p className="quote-author">- {author}</p>
+    <div className="flex-col w-100">
+      <div className="flex-row">
+        {categories?.map((item) => (
+          <button
+            onClick={() =>
+              selectedCategory === item?.category
+                ? setSelectedCategory()
+                : setSelectedCategory(item?.category)
+            }
+            className={
+              selectedCategory === item?.category
+                ? "cat-btn-selected"
+                : "cat-btn"
+            }
+            key={item?.id}
+          >
+            {item?.category}
+          </button>
+        ))}
       </div>
-      <button onClick={fetchQuote} className="new-quote-button">
-        Get New Quote
+      <div className="spacer" />
+      <p className="font-niconne text-64">"{displayQuote?.quote}"</p>
+      <p className="font-niconne text-24">-{displayQuote?.author}</p>
+      <button
+        onClick={() => getRandomQuote(selectedCategory)}
+        className="new-quote-button"
+      >
+        Get Another
       </button>
+      <div className="spacer" />
+      <Social quote={`${displayQuote?.title} - ${displayQuote?.author}`} />
     </div>
   );
 }
