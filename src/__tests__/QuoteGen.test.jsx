@@ -1,21 +1,28 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { QuoteGen } from "../components/QuoteGen";
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { QuoteGen } from '../components/QuoteGen';
 
-const updatedQuotePlaceholder = /updatedQuotePlaceholder/i;
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () => Promise.resolve([
+      { text: 'Test quote', author: 'Test Author' },
+      { text: 'Another quote', author: 'Another Author' },
+    ]),
+  })
+);
 
-describe("QuoteGenerator Component", () => {
-  it("renders a quote initially", () => {
+describe('QuoteGenerator Component', () => {
+  it('renders a quote initially', async () => {
     render(<QuoteGen />);
-    expect(screen.getByText(/Quote generator/i)).toBeInTheDocument();
+    expect(await screen.findByText(/"Test quote"/)).toBeInTheDocument();
+    expect(screen.getByText(/-Test Author/)).toBeInTheDocument();
   });
 
-  it("generates a new quote when the button is clicked", () => {
+  it('generates a new quote when the button is clicked', async () => {
     render(<QuoteGen />);
-    const button = screen.getByRole("button", { name: /get new quote/i });
-
+    const button = screen.getByText('Get New Quote');
     fireEvent.click(button);
-
-    const updatedQuote = screen.getByText(updatedQuotePlaceholder);
-    expect(updatedQuote).toBeInTheDocument();
+    expect(await screen.findByText(/"Test quote"/)).toBeInTheDocument();
   });
 });
