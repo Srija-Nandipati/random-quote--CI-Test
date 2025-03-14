@@ -1,12 +1,42 @@
-# React + Vite
+# Quote Generator - CI Demo/Learning
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple quote generator built with React, Vite, and Vitest for testing.
 
-Currently, two official plugins are available:
+## 🚀 Running the Project Locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1.  **Clone the Repository**
+    
+    ```
+    git clone <repository-url>
+    cd quote-generator
+    ```
+    
+2.  **Install Dependencies**
+    
+    ```
+    yarn install
+    ```
+    
+3.  **Start the Development Server**
+    
+    ```
+    yarn dev
+    ```
+    
+4.  **Run Tests**
+    
+    ```
+    yarn test
+    ```
+    
 
-## Expanding the ESLint configuration
+## 📄 Project Structure
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+-   `src/components/` — Core React components.
+    
+-   `src/consts/quotes.js` — List of quotes and categories.
+    
+-   `src/__tests__/` — Vitest test files.
+    
+
+For issues or improvements, feel free to contribute! 🚀
