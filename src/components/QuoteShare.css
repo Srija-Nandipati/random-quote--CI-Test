@@ -1,0 +1,17 @@
+/* src/components/QuoteShare.css */
+.quote-share {
+    margin: 20px 0;
+  }
+  
+  .share-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .share-button {
+    cursor: pointer;
+  }
+  
+  .instagram-button img {
+    vertical-align: middle;
+  }
