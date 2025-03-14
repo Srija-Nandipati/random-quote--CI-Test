@@ -1,24 +1,28 @@
-// src/components/QuoteGen.jsx
+// export function QuoteGen() {
+//   return <div>Quote Generator</div>;
+// }
+
 import React, { useState, useEffect } from 'react';
 
-export function QuoteGen({ onQuoteChange }) {
-  const [quote, setQuote] = useState({ text: '', author: '' });
+export function QuoteGen() {
+  // State for quote and author
+  const [quote, setQuote] = useState('');
+  const [author, setAuthor] = useState('');
 
+  // Function to fetch a random quote
   const fetchQuote = async () => {
     try {
       const response = await fetch('https://type.fit/api/quotes');
-      if (!response.ok) throw new Error('Network response was not ok');
-      const data = await response.json();
-      const randomQuote = data[Math.floor(Math.random() * data.length)];
-      const newQuote = { text: randomQuote.text, author: randomQuote.author || 'Unknown' };
-      setQuote(newQuote);
-      if (onQuoteChange) onQuoteChange({ quote: newQuote.text, author: newQuote.author, url: window.location.href });
+      const quotes = await response.json();
+      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+      setQuote(randomQuote.text);
+      setAuthor(randomQuote.author || 'Unknown');
     } catch (error) {
       console.error('Error fetching the quote:', error);
-      setQuote({ text: 'Failed to load quote', author: 'Error' }); // Fallback
     }
   };
 
+  // Fetch a quote on component mount
   useEffect(() => {
     fetchQuote();
   }, []);
@@ -26,10 +30,10 @@ export function QuoteGen({ onQuoteChange }) {
   return (
     <div className="quote-generator">
       <div className="quote-card">
-        <p className="quote-text">"{quote.text}"</p>
-        <p className="quote-author">-{quote.author}</p>
+        <p className="quote-text">"{quote}"</p>
+        <p className="quote-author">- {author}</p>
       </div>
-      <button className="new-quote-button" onClick={fetchQuote}>
+      <button onClick={fetchQuote} className="new-quote-button">
         Get New Quote
       </button>
     </div>
