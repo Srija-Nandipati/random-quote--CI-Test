@@ -1,21 +1,42 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QuoteGen } from "../components/QuoteGen";
+import { quotes } from "../consts/quotes";
 
-const updatedQuotePlaceholder = /updatedQuotePlaceholder/i;
-
-describe("QuoteGenerator Component", () => {
-  it("renders a quote initially", () => {
+describe("QuoteGen Component", () => {
+  it("renders a quote from the selected category", () => {
     render(<QuoteGen />);
-    expect(screen.getByText(/Quote generator/i)).toBeInTheDocument();
+
+    const motivationButton = screen.getByRole("button", {
+      name: /Motivation/i,
+    });
+    fireEvent.click(motivationButton);
+
+    const displayedQuote = screen.getByText(/"/);
+    expect(displayedQuote).toBeInTheDocument();
+
+    const filteredQuotes = quotes.filter((q) => q.category === "Motivation");
+    const displayedQuoteText = displayedQuote.textContent
+      .replace(/"/g, "")
+      .trim();
+
+    const isQuoteFromCorrectCategory = filteredQuotes.some(
+      (q) => q.quote === displayedQuoteText
+    );
+
+    expect(isQuoteFromCorrectCategory).toBe(true);
   });
 
-  it("generates a new quote when the button is clicked", () => {
+  it("fetches a new random quote when 'Get Another' is clicked", () => {
     render(<QuoteGen />);
-    const button = screen.getByRole("button", { name: /get new quote/i });
 
-    fireEvent.click(button);
+    const firstQuote = screen.getByText(/"/).textContent;
+    const getAnotherButton = screen.getByRole("button", {
+      name: /Get Another/i,
+    });
 
-    const updatedQuote = screen.getByText(updatedQuotePlaceholder);
-    expect(updatedQuote).toBeInTheDocument();
+    fireEvent.click(getAnotherButton);
+    const secondQuote = screen.getByText(/"/).textContent;
+
+    expect(firstQuote).not.toEqual(secondQuote);
   });
 });
